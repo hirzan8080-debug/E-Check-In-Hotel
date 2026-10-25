@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-Check In Hotel</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Custom Tailwind Config -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary:   '#E94F37',
+            secondary: '#F9844A',
+            accent:    '#F9C74F',
+            light:     '#FDD985',
+            cream:     '#FFF2E7',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="bg-cream font-sans text-gray-800 min-h-screen">
+
+  <!-- ===== SIDEBAR NAVIGATION ===== -->
+  <aside id="sidebar" class="sidebar fixed top-0 left-0 h-full w-64 bg-white shadow-xl z-40 flex flex-col transition-transform duration-300">
+    <!-- Logo -->
+    <div class="logo-area flex items-center gap-3 px-6 py-5 border-b border-gray-100">
+      <div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center">
+        <span class="text-white font-bold text-lg">E</span>
+      </div>
+      <div>
+        <p class="font-bold text-gray-800 text-sm leading-tight">E-Check In</p>
+        <p class="text-xs text-gray-400">Hotel Management</p>
+      </div>
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav class="flex-1 px-4 py-4 overflow-y-auto">
+      <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 px-2">Menu Utama</p>
+      <ul class="space-y-1" id="navMenu">
+        <li><a href="#" class="nav-item active" data-page="dashboard">
+          <span class="nav-icon">🏠</span><span>Dashboard</span>
+        </a></li>
+        <li><a href="#" class="nav-item" data-page="reservasi">
+          <span class="nav-icon">📋</span><span>Reservasi & Input Data</span>
+        </a></li>
+        <li><a href="#" class="nav-item" data-page="verifikasi">
+          <span class="nav-icon">🪪</span><span>Verifikasi Identitas</span>
+        </a></li>
+        <li><a href="#" class="nav-item" data-page="kamar">
+          <span class="nav-icon">🛏</span><span>Pemilihan Kamar</span>
+        </a></li>
+        <li><a href="#" class="nav-item" data-page="kunci">
+          <span class="nav-icon">🔑</span><span>Kunci Digital</span>
+        </a></li>
+        <li><a href="#" class="nav-item" data-page="pembayaran">
+          <span class="nav-icon">💳</span><span>Pembayaran Online</span>
+        </a></li>
+        <li><a href="#" class="nav-item" data-page="pms">
+          <span class="nav-icon">🏨</span><span>Property Management</span>
+        </a></li>
+        <li><a href="#" class="nav-item" data-page="notifikasi">
+          <span class="nav-icon">🔔</span><span>Notifikasi & Konfirmasi</span>
+        </a></li>
+        <li><a href="#" class="nav-item" data-page="survey">
+          <span class="nav-icon">⭐</span><span>Survey Kepuasan</span>
+        </a></li>
+      </ul>
+    </nav>
+
+    <!-- Sidebar Footer -->
+    <div class="px-4 py-4 border-t border-gray-100">
+      <div class="flex items-center gap-3 px-2">
+        <div class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-sm font-bold">A</div>
+        <div>
+          <p class="text-sm font-semibold text-gray-700">Admin Hotel</p>
+          <p class="text-xs text-gray-400">Front Desk</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Sidebar Overlay (Mobile) -->
+  <div id="sidebarOverlay" class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" onclick="closeSidebar()"></div>
+
+  <!-- ===== MAIN CONTENT AREA ===== -->
+  <main class="main-content ml-64 min-h-screen flex flex-col">
+
+    <!-- Top Header Bar -->
+    <header class="sticky top-0 z-20 bg-white/80 backdrop-blur border-b border-gray-100 px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <!-- Mobile Hamburger -->
+        <button class="lg:hidden p-2 rounded-lg hover:bg-gray-100" onclick="toggleSidebar()">
+          <div class="w-5 h-0.5 bg-gray-600 mb-1"></div>
+          <div class="w-5 h-0.5 bg-gray-600 mb-1"></div>
+          <div class="w-5 h-0.5 bg-gray-600"></div>
+        </button>
+        <div>
+          <h1 id="pageTitle" class="text-xl font-bold text-gray-800">Dashboard</h1>
+          <p id="pageSubtitle" class="text-xs text-gray-400">Selamat datang di sistem E-Check In Hotel</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <!-- Notification Bell -->
+        <button class="relative p-2 rounded-xl hover:bg-cream transition" onclick="navigateTo('notifikasi')">
+          <span class="text-xl">🔔</span>
+          <span id="notifBadge" class="absolute top-1 right-1 w-4 h-4 bg-primary rounded-full text-white text-xs flex items-center justify-center">3</span>
+        </button>
+        <!-- Date/Time -->
+        <div class="hidden sm:block text-right">
+          <p id="currentTime" class="text-sm font-semibold text-gray-700"></p>
+          <p id="currentDate" class="text-xs text-gray-400"></p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Page Content Container -->
+    <div class="flex-1 p-6">
+
+      <!-- ============================= -->
+      <!-- PAGE: DASHBOARD               -->
+      <!-- ============================= -->
+      <section id="page-dashboard" class="page-section">
+
+        <!-- Stat Cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div class="stat-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover-lift">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-2xl">🛏</span>
+              <span class="text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded-full">Tersedia</span>
+            </div>
+            <p id="statKamarTersedia" class="text-3xl font-bold text-gray-800">12</p>
+            <p class="text-sm text-gray-500 mt-1">Kamar Tersedia</p>
+          </div>
+          <div class="stat-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover-lift">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-2xl">👤</span>
+              <span class="text-xs font-semibold text-primary bg-red-50 px-2 py-1 rounded-full">Aktif</span>
+            </div>
+            <p id="statTamuAktif" class="text-3xl font-bold text-gray-800">8</p>
+            <p class="text-sm text-gray-500 mt-1">Tamu Aktif</p>
+          </div>
+          <div class="stat-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover-lift">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-2xl">💰</span>
+              <span class="text-xs font-semibold text-blue-600 bg-blue-50 px-2 py-1 rounded-full">Hari ini</span>
+            </div>
+            <p id="statPendapatan" class="text-2xl font-bold text-gray-800">Rp 4,2M</p>
+            <p class="text-sm text-gray-500 mt-1">Pendapatan</p>
+          </div>
+          <div class="stat-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover-lift">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-2xl">⭐</span>
+              <span class="text-xs font-semibold text-yellow-600 bg-yellow-50 px-2 py-1 rounded-full">Rating</span>
+            </div>
+            <p id="statRating" class="text-3xl font-bold text-gray-800">4.8</p>
+            <p class="text-sm text-gray-500 mt-1">Kepuasan Tamu</p>
+          </div>
+        </div>
+
+        <!-- Recent Activity + Room Status -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+
+          <!-- Recent Check-ins -->
+          <div class="lg:col-span-2 bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="font-semibold text-gray-700">Check-in Terbaru</h3>
+              <button class="text-xs text-primary hover:underline" onclick="navigateTo('pms')">Lihat Semua →</button>
+            </div>
+            <div id="recentCheckins" class="space-y-3">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Room Occupancy Chart -->
+          <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+            <h3 class="font-semibold text-gray-700 mb-4">Status Kamar</h3>
+            <div class="space-y-3" id="roomStatusChart">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ============================= -->
+      <!-- PAGE: RESERVASI               -->
+      <!-- ============================= -->
+      <section id="page-reservasi" class="page-section hidden">
+        <div class="max-w-2xl mx-auto">
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                <span class="text-xl">📋</span>
+              </div>
+              <div>
+                <h2 class="font-bold text-gray-800">Form Reservasi & Check-In</h2>
+                <p class="text-xs text-gray-400">Isi data tamu untuk melakukan check-in</p>
+              </div>
+            </div>
+
+            <form id="reservasiForm" class="space-y-4">
+              <!-- Row 1 -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="form-label">Nama Lengkap *</label>
+                  <input type="text" id="namaLengkap" class="form-input" placeholder="Masukkan nama lengkap" required />
+                </div>
+                <div>
+                  <label class="form-label">No. Telepon *</label>
+                  <input type="tel" id="noTelepon" class="form-input" placeholder="08xxxxxxxxxx" required />
+                </div>
+              </div>
+              <!-- Row 2 -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="form-label">Email *</label>
+                  <input type="email" id="emailTamu" class="form-input" placeholder="email@example.com" required />
+                </div>
+                <div>
+                  <label class="form-label">No. KTP / Paspor *</label>
+                  <input type="text" id="noIdentitas" class="form-input" placeholder="Nomor identitas" required />
+                </div>
+              </div>
+              <!-- Row 3 -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="form-label">Tanggal Check-In *</label>
+                  <input type="date" id="tglCheckin" class="form-input" required />
+                </div>
+                <div>
+                  <label class="form-label">Tanggal Check-Out *</label>
+                  <input type="date" id="tglCheckout" class="form-input" required />
+                </div>
+              </div>
+              <!-- Row 4 -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="form-label">Jumlah Tamu</label>
+                  <select id="jumlahTamu" class="form-input">
+                    <option value="1">1 Orang</option>
+                    <option value="2" selected>2 Orang</option>
+                    <option value="3">3 Orang</option>
+                    <option value="4">4 Orang</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="form-label">Tipe Kamar *</label>
+                  <select id="tipeKamar" class="form-input" required>
+                    <option value="">Pilih tipe kamar</option>
+                    <option value="standard">Standard - Rp 500.000/malam</option>
+                    <option value="deluxe">Deluxe - Rp 800.000/malam</option>
+                    <option value="suite">Suite - Rp 1.500.000/malam</option>
+                    <option value="president">Presidential - Rp 3.000.000/malam</option>
+                  </select>
+                </div>
+              </div>
+              <!-- Catatan -->
+              <div>
+                <label class="form-label">Permintaan Khusus</label>
+                <textarea id="catatanTamu" class="form-input" rows="3" placeholder="Contoh: kamar non-smoking, lantai tinggi, dll."></textarea>
+              </div>
+
+              <!-- Estimasi Biaya -->
+              <div id="estimasiBiaya" class="hidden bg-cream rounded-xl p-4 border border-light">
+                <p class="text-sm font-semibold text-gray-600">Estimasi Biaya</p>
+                <p id="estimasiBiayaText" class="text-xl font-bold text-primary mt-1"></p>
+              </div>
+
+              <button type="submit" class="w-full btn-primary">
+                ✅ Lanjut ke Verifikasi Identitas
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================= -->
+      <!-- PAGE: VERIFIKASI              -->
+      <!-- ============================= -->
+      <section id="page-verifikasi" class="page-section hidden">
+        <div class="max-w-2xl mx-auto">
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                <span class="text-xl">🪪</span>
+              </div>
+              <div>
+                <h2 class="font-bold text-gray-800">Verifikasi Identitas</h2>
+                <p class="text-xs text-gray-400">Upload foto identitas dan selfie untuk konfirmasi</p>
+              </div>
+            </div>
+
+            <!-- Tamu Info -->
+            <div id="verifikasiTamuInfo" class="bg-cream rounded-xl p-4 mb-5 border border-light">
+              <p class="text-sm text-gray-500">Tamu yang akan diverifikasi:</p>
+              <p id="verifikasiNama" class="font-bold text-gray-800 text-lg">-</p>
+              <p id="verifikasiNoId" class="text-sm text-gray-500">No. ID: -</p>
+            </div>
+
+            <div class="space-y-5">
+              <!-- Upload KTP -->
+              <div>
+                <label class="form-label">📷 Foto KTP / Paspor</label>
+                <div id="uploadKtp" class="upload-area" onclick="document.getElementById('ktpFile').click()">
+                  <div id="ktpPreview" class="text-center">
+                    <span class="text-3xl">📄</span>
+                    <p class="text-sm text-gray-500 mt-2">Klik untuk upload foto identitas</p>
+                    <p class="text-xs text-gray-400">PNG, JPG, atau PDF (Maks. 5MB)</p>
+                  </div>
+                </div>
+                <input type="file" id="ktpFile" class="hidden" accept="image/*,.pdf" onchange="previewFile(this, 'ktpPreview', 'ktpStatus')" />
+                <p id="ktpStatus" class="text-xs text-green-600 mt-1 hidden">✅ File berhasil diupload</p>
+              </div>
+
+              <!-- Upload Selfie -->
+              <div>
+                <label class="form-label">🤳 Selfie dengan Identitas</label>
+                <div id="uploadSelfie" class="upload-area" onclick="document.getElementById('selfieFile').click()">
+                  <div id="selfiePreview" class="text-center">
+                    <span class="text-3xl">🤳</span>
+                    <p class="text-sm text-gray-500 mt-2">Klik untuk upload selfie</p>
+                    <p class="text-xs text-gray-400">Foto harus jelas dan terang</p>
+                  </div>
+                </div>
+                <input type="file" id="selfieFile" class="hidden" accept="image/*" onchange="previewFile(this, 'selfiePreview', 'selfieStatus')" />
+                <p id="selfieStatus" class="text-xs text-green-600 mt-1 hidden">✅ File berhasil diupload</p>
+              </div>
+
+              <!-- Verifikasi Status -->
+              <div id="verifikasiResult" class="hidden rounded-xl p-4 border">
+                <p id="verifikasiResultText" class="text-sm font-semibold"></p>
+              </div>
+
+              <button onclick="prosesVerifikasi()" class="w-full btn-primary">
+                🔍 Proses Verifikasi Identitas
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================= -->
+      <!-- PAGE: PEMILIHAN KAMAR         -->
+      <!-- ============================= -->
+      <section id="page-kamar" class="page-section hidden">
+        <!-- Filter -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mb-4 flex flex-wrap gap-3 items-center">
+          <span class="text-sm font-semibold text-gray-600">Filter:</span>
+          <button class="filter-btn active" data-filter="all">Semua</button>
+          <button class="filter-btn" data-filter="available">Tersedia</button>
+          <button class="filter-btn" data-filter="occupied">Terisi</button>
+          <button class="filter-btn" data-filter="cleaning">Cleaning</button>
+          <div class="ml-auto flex items-center gap-2">
+            <span class="text-xs text-gray-500">Lantai:</span>
+            <select id="floorFilter" class="text-sm border border-gray-200 rounded-lg px-2 py-1" onchange="filterRooms()">
+              <option value="all">Semua</option>
+              <option value="1">Lantai 1</option>
+              <option value="2">Lantai 2</option>
+              <option value="3">Lantai 3</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Room Grid -->
+        <div id="roomGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- ============================= -->
+      <!-- PAGE: KUNCI DIGITAL           -->
+      <!-- ============================= -->
+      <section id="page-kunci" class="page-section hidden">
+        <div class="max-w-xl mx-auto">
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                <span class="text-xl">🔑</span>
+              </div>
+              <div>
+                <h2 class="font-bold text-gray-800">Kunci Digital</h2>
+                <p class="text-xs text-gray-400">Generate dan kelola kunci digital kamar</p>
+              </div>
+            </div>
+
+            <!-- Input Generate Kunci -->
+            <div class="space-y-4 mb-6">
+              <div>
+                <label class="form-label">Pilih Tamu / Reservasi</label>
+                <select id="selectTamuKunci" class="form-input">
+                  <option value="">-- Pilih tamu aktif --</option>
+                </select>
+              </div>
+              <button onclick="generateKunci()" class="w-full btn-primary">
+                🔑 Generate Kunci Digital
+              </button>
+            </div>
+
+            <!-- Kunci Display -->
+            <div id="kunciDisplay" class="hidden">
+              <div class="kunci-card text-center rounded-2xl p-6 mb-4">
+                <p class="text-sm text-white/80 mb-2">Kunci Digital Kamar</p>
+                <p id="kunciKamarNo" class="text-4xl font-bold text-white mb-1">101</p>
+                <div class="bg-white/20 rounded-xl px-6 py-3 mb-3">
+                  <p id="kunciCode" class="text-3xl font-mono font-bold text-white tracking-widest"></p>
+                </div>
+                <div id="kunciQR" class="flex justify-center mb-3">
+                  <!-- QR Code placeholder -->
+                </div>
+                <p id="kunciValid" class="text-xs text-white/70"></p>
+              </div>
+
+              <!-- Kunci Info -->
+              <div class="space-y-2 mb-4">
+                <div class="flex justify-between text-sm">
+                  <span class="text-gray-500">Nama Tamu:</span>
+                  <span id="kunciNama" class="font-semibold text-gray-800"></span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span class="text-gray-500">Berlaku Hingga:</span>
+                  <span id="kunciExp" class="font-semibold text-gray-800"></span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span class="text-gray-500">Status:</span>
+                  <span class="text-green-600 font-semibold">● Aktif</span>
+                </div>
+              </div>
+
+              <div class="flex gap-3">
+                <button onclick="copyKunci()" class="flex-1 btn-secondary text-sm">📋 Salin Kode</button>
+                <button onclick="kirimKunci()" class="flex-1 btn-primary text-sm">📤 Kirim ke Tamu</button>
+              </div>
+            </div>
+
+            <!-- Riwayat Kunci -->
+            <div class="mt-6 pt-5 border-t border-gray-100">
+              <h3 class="text-sm font-semibold text-gray-700 mb-3">Riwayat Kunci Aktif</h3>
+              <div id="riwayatKunci" class="space-y-2">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================= -->
+      <!-- PAGE: PEMBAYARAN              -->
+      <!-- ============================= -->
+      <section id="page-pembayaran" class="page-section hidden">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+
+          <!-- Form Pembayaran -->
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <div class="flex items-center gap-3 mb-5">
+              <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                <span class="text-xl">💳</span>
+              </div>
+              <div>
+                <h2 class="font-bold text-gray-800">Pembayaran Online</h2>
+                <p class="text-xs text-gray-400">Proses pembayaran tamu</p>
+              </div>
+            </div>
+
+            <form id="pembayaranForm" class="space-y-4" onsubmit="prosesPembayaran(event)">
+              <div>
+                <label class="form-label">Pilih Reservasi</label>
+                <select id="selectReservasiPembayaran" class="form-input" onchange="loadBiayaReservasi()">
+                  <option value="">-- Pilih reservasi --</option>
+                </select>
+              </div>
+              <div id="infoTagihanArea" class="hidden bg-cream rounded-xl p-4 border border-light">
+                <div class="flex justify-between text-sm mb-1">
+                  <span class="text-gray-500">Tamu:</span>
+                  <span id="tagihanNama" class="font-semibold"></span>
+                </div>
+                <div class="flex justify-between text-sm mb-1">
+                  <span class="text-gray-500">Kamar:</span>
+                  <span id="tagihanKamar" class="font-semibold"></span>
+                </div>
+                <div class="flex justify-between text-sm mb-1">
+                  <span class="text-gray-500">Durasi:</span>
+                  <span id="tagihanDurasi" class="font-semibold"></span>
+                </div>
+                <div class="border-t border-light mt-2 pt-2 flex justify-between">
+                  <span class="font-semibold text-gray-700">Total:</span>
+                  <span id="tagihanTotal" class="font-bold text-primary text-lg"></span>
+                </div>
+              </div>
+              <div>
+                <label class="form-label">Metode Pembayaran</label>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-2" id="paymentMethods">
+                  <label class="payment-method-btn">
+                    <input type="radio" name="metodePembayaran" value="transfer" class="hidden" />
+                    <span>🏦</span><span class="text-xs mt-1">Transfer Bank</span>
+                  </label>
+                  <label class="payment-method-btn">
+                    <input type="radio" name="metodePembayaran" value="qris" class="hidden" />
+                    <span>📱</span><span class="text-xs mt-1">QRIS</span>
+                  </label>
+                  <label class="payment-method-btn">
+                    <input type="radio" name="metodePembayaran" value="credit" class="hidden" />
+                    <span>💳</span><span class="text-xs mt-1">Kartu Kredit</span>
+                  </label>
+                  <label class="payment-method-btn">
+                    <input type="radio" name="metodePembayaran" value="debit" class="hidden" />
+                    <span>💰</span><span class="text-xs mt-1">Kartu Debit</span>
+                  </label>
+                  <label class="payment-method-btn">
+                    <input type="radio" name="metodePembayaran" value="ewallet" class="hidden" />
+                    <span>📲</span><span class="text-xs mt-1">E-Wallet</span>
+                  </label>
+                  <label class="payment-method-btn">
+                    <input type="radio" name="metodePembayaran" value="tunai" class="hidden" />
+                    <span>💵</span><span class="text-xs mt-1">Tunai</span>
+                  </label>
+                </div>
+              </div>
+              <button type="submit" class="w-full btn-primary">
+                ✅ Proses Pembayaran
+              </button>
+            </form>
+          </div>
+
+          <!-- Riwayat Pembayaran -->
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <div class="flex items-center justify-between mb-5">
+              <h2 class="font-bold text-gray-800">Riwayat Pembayaran</h2>
+              <span id="totalPembayaranBadge" class="text-xs font-semibold bg-green-50 text-green-700 px-2 py-1 rounded-full">0 transaksi</span>
+            </div>
+            <div id="riwayatPembayaran" class="space-y-3 max-h-[480px] overflow-y-auto">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================= -->
+      <!-- PAGE: PROPERTY MANAGEMENT     -->
+      <!-- ============================= -->
+      <section id="page-pms" class="page-section hidden">
+        <!-- Search & Action Bar -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mb-4 flex flex-wrap gap-3 items-center justify-between">
+          <div class="flex items-center gap-2 flex-1 min-w-[200px]">
+            <span class="text-gray-400">🔍</span>
+            <input type="text" id="searchTamu" class="flex-1 bg-transparent text-sm outline-none placeholder-gray-400" placeholder="Cari nama tamu, kamar, atau ID..." oninput="filterTamu()" />
+          </div>
+          <div class="flex gap-2">
+            <select id="statusFilter" class="text-sm border border-gray-200 rounded-lg px-3 py-2" onchange="filterTamu()">
+              <option value="all">Semua Status</option>
+              <option value="checkin">Check-in</option>
+              <option value="checkout">Check-out</option>
+              <option value="reserved">Reserved</option>
+            </select>
+            <button onclick="navigateTo('reservasi')" class="btn-primary text-sm px-4">+ Tambah Tamu</button>
+          </div>
+        </div>
+
+        <!-- Tamu Table -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="bg-gray-50 border-b border-gray-100">
+                  <th class="text-left px-4 py-3 font-semibold text-gray-600">Tamu</th>
+                  <th class="text-left px-4 py-3 font-semibold text-gray-600">Kamar</th>
+                  <th class="text-left px-4 py-3 font-semibold text-gray-600">Check-in</th>
+                  <th class="text-left px-4 py-3 font-semibold text-gray-600">Check-out</th>
+                  <th class="text-left px-4 py-3 font-semibold text-gray-600">Status</th>
+                  <th class="text-left px-4 py-3 font-semibold text-gray-600">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="tamuTableBody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================= -->
+      <!-- PAGE: NOTIFIKASI              -->
+      <!-- ============================= -->
+      <section id="page-notifikasi" class="page-section hidden">
+        <div class="max-w-2xl mx-auto">
+          <!-- Action Bar -->
+          <div class="flex justify-between items-center mb-4">
+            <p class="text-sm text-gray-500">Total <span id="totalNotif" class="font-semibold text-gray-800">0</span> notifikasi</p>
+            <button onclick="clearAllNotif()" class="text-sm text-primary hover:underline">Hapus Semua</button>
+          </div>
+          <div id="notifikasiList" class="space-y-3">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================= -->
+      <!-- PAGE: SURVEY                  -->
+      <!-- ============================= -->
+      <section id="page-survey" class="page-section hidden">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+
+          <!-- Form Survey -->
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <div class="flex items-center gap-3 mb-5">
+              <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                <span class="text-xl">⭐</span>
+              </div>
+              <div>
+                <h2 class="font-bold text-gray-800">Survey Kepuasan Tamu</h2>
+                <p class="text-xs text-gray-400">Bantu kami meningkatkan layanan</p>
+              </div>
+            </div>
+
+            <form id="surveyForm" onsubmit="submitSurvey(event)" class="space-y-5">
+              <div>
+                <label class="form-label">Nama Tamu</label>
+                <input type="text" id="surveyNama" class="form-input" placeholder="Masukkan nama Anda" required />
+              </div>
+              <div>
+                <label class="form-label">No. Kamar</label>
+                <input type="text" id="surveyKamar" class="form-input" placeholder="Contoh: 101" required />
+              </div>
+
+              <!-- Rating Sections -->
+              <div>
+                <label class="form-label">Rating Kebersihan</label>
+                <div class="star-rating" id="ratingKebersihan" data-key="kebersihan"></div>
+              </div>
+              <div>
+                <label class="form-label">Rating Pelayanan Staff</label>
+                <div class="star-rating" id="ratingPelayanan" data-key="pelayanan"></div>
+              </div>
+              <div>
+                <label class="form-label">Rating Fasilitas</label>
+                <div class="star-rating" id="ratingFasilitas" data-key="fasilitas"></div>
+              </div>
+              <div>
+                <label class="form-label">Rating Aplikasi E-Check In</label>
+                <div class="star-rating" id="ratingAplikasi" data-key="aplikasi"></div>
+              </div>
+
+              <div>
+                <label class="form-label">Komentar & Saran</label>
+                <textarea id="surveyKomentar" class="form-input" rows="3" placeholder="Bagikan pengalaman Anda..."></textarea>
+              </div>
+              <button type="submit" class="w-full btn-primary">
+                📨 Kirim Survey
+              </button>
+            </form>
+          </div>
+
+          <!-- Hasil Survey -->
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <div class="flex items-center justify-between mb-5">
+              <h2 class="font-bold text-gray-800">Hasil Survey</h2>
+              <span id="totalSurveyBadge" class="text-xs font-semibold bg-yellow-50 text-yellow-700 px-2 py-1 rounded-full">0 responden</span>
+            </div>
+
+            <!-- Average Rating Display -->
+            <div class="bg-cream rounded-xl p-4 mb-4 text-center border border-light">
+              <p class="text-5xl font-bold text-primary" id="avgRatingDisplay">0.0</p>
+              <div id="avgStarsDisplay" class="flex justify-center gap-1 my-2"></div>
+              <p class="text-sm text-gray-500">Rata-rata dari semua kategori</p>
+            </div>
+
+            <!-- Category Bars -->
+            <div id="surveyBars" class="space-y-3 mb-4">
+              <!-- Populated by JS -->
+            </div>
+
+            <!-- Recent Reviews -->
+            <h3 class="text-sm font-semibold text-gray-700 mb-3 border-t border-gray-100 pt-4">Ulasan Terbaru</h3>
+            <div id="recentSurveys" class="space-y-3 max-h-64 overflow-y-auto">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- end p-6 -->
+  </main>
+
+  <!-- ===== TOAST NOTIFICATION ===== -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 space-y-2"></div>
+
+  <!-- ===== MODAL ===== -->
+  <div id="modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl shadow-2xl p-6 max-w-md w-full mx-4 animate-modal">
+      <div id="modalContent"></div>
+      <button onclick="closeModal()" class="mt-4 w-full text-sm text-gray-500 hover:text-gray-700">Tutup</button>
+    </div>
+  </div>
+
+  <!-- Script -->
+  <script src="script.js"></script>
+</body>
+</html>

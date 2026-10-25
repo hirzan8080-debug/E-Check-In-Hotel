@@ -1,0 +1,477 @@
+/* =========================================
+   E-Check In Hotel — Custom Styles
+   Author: IBM Senior Frontend Engineer
+   Stack: HTML + Tailwind CSS + Vanilla JS
+   ========================================= */
+
+/* ---- BASE & TYPOGRAPHY ---- */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: #FFF2E7;
+  color: #1f2328;
+}
+
+/* ---- SIDEBAR ---- */
+.sidebar {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Mobile: sidebar tersembunyi secara default */
+@media (max-width: 1023px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  .main-content {
+    margin-left: 0 !important;
+  }
+}
+
+/* ---- NAV ITEMS ---- */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.nav-item:hover {
+  background-color: #FFF2E7;
+  color: #E94F37;
+}
+
+.nav-item.active {
+  background: linear-gradient(135deg, #E94F37, #F9844A);
+  color: #fff;
+  font-weight: 600;
+}
+
+.nav-icon {
+  font-size: 1rem;
+  width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+/* ---- MAIN CONTENT ---- */
+.main-content {
+  margin-left: 256px;
+  transition: margin-left 0.3s ease;
+}
+
+/* ---- PAGE SECTIONS ---- */
+.page-section {
+  animation: fadeInUp 0.3s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---- STAT CARDS ---- */
+.stat-card {
+  transition: all 0.25s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(233, 79, 55, 0.12);
+}
+
+/* ---- BUTTONS ---- */
+.btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 20px;
+  background: linear-gradient(135deg, #E94F37, #F9844A);
+  color: white;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  width: 100%;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #d44030, #e8733e);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(233, 79, 55, 0.35);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 20px;
+  background: white;
+  color: #E94F37;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: 2px solid #E94F37;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background: #FFF2E7;
+  transform: translateY(-1px);
+}
+
+/* ---- FORM ELEMENTS ---- */
+.form-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #4b5563;
+  margin-bottom: 6px;
+  letter-spacing: 0.01em;
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  color: #1f2328;
+  background: #fff;
+  outline: none;
+  transition: all 0.2s ease;
+  font-family: 'Inter', sans-serif;
+}
+
+.form-input:focus {
+  border-color: #E94F37;
+  box-shadow: 0 0 0 3px rgba(233, 79, 55, 0.12);
+}
+
+.form-input::placeholder {
+  color: #9ca3af;
+}
+
+/* ---- UPLOAD AREA ---- */
+.upload-area {
+  border: 2px dashed #e5e7eb;
+  border-radius: 12px;
+  padding: 24px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  background: #fafafa;
+}
+
+.upload-area:hover {
+  border-color: #E94F37;
+  background: #FFF2E7;
+}
+
+/* ---- ROOM CARDS ---- */
+.room-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 14px;
+  border: 1.5px solid #e5e7eb;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.room-card:hover {
+  border-color: #E94F37;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(233, 79, 55, 0.1);
+}
+
+.room-card.available {
+  border-color: #d1fae5;
+}
+
+.room-card.occupied {
+  border-color: #fee2e2;
+  background: #fff5f5;
+  cursor: not-allowed;
+}
+
+.room-card.cleaning {
+  border-color: #fef3c7;
+  background: #fffbeb;
+  cursor: not-allowed;
+}
+
+.room-card.selected {
+  border-color: #E94F37;
+  background: #FFF2E7;
+  box-shadow: 0 0 0 3px rgba(233, 79, 55, 0.15);
+}
+
+.room-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 4px;
+}
+
+/* ---- KUNCI DIGITAL CARD ---- */
+.kunci-card {
+  background: linear-gradient(135deg, #E94F37, #F9844A, #F9C74F);
+  color: white;
+}
+
+/* ---- PAYMENT METHOD BUTTONS ---- */
+.payment-method-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 12px 8px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.payment-method-btn:hover {
+  border-color: #E94F37;
+  background: #FFF2E7;
+}
+
+.payment-method-btn input[type="radio"]:checked + span + span,
+.payment-method-btn.selected {
+  color: #E94F37;
+}
+
+.payment-method-btn.selected {
+  border-color: #E94F37;
+  background: #FFF2E7;
+}
+
+/* ---- FILTER BUTTONS ---- */
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border: 1.5px solid #e5e7eb;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #6b7280;
+}
+
+.filter-btn:hover {
+  border-color: #E94F37;
+  color: #E94F37;
+}
+
+.filter-btn.active {
+  background: linear-gradient(135deg, #E94F37, #F9844A);
+  color: white;
+  border-color: transparent;
+}
+
+/* ---- STAR RATING ---- */
+.star-rating {
+  display: flex;
+  gap: 6px;
+}
+
+.star-btn {
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+  color: #d1d5db;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.star-btn:hover,
+.star-btn.active {
+  color: #F9C74F;
+  transform: scale(1.15);
+}
+
+/* ---- TABLE ---- */
+table tbody tr {
+  transition: background 0.15s ease;
+}
+
+table tbody tr:hover {
+  background: #FFF2E7;
+}
+
+/* ---- STATUS BADGES ---- */
+.badge-checkin {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.badge-checkout {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.badge-reserved {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+/* ---- TOAST NOTIFICATION ---- */
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: #1f2328;
+  color: white;
+  font-size: 0.85rem;
+  max-width: 320px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  animation: toastIn 0.3s ease;
+}
+
+.toast.success { background: #16a34a; }
+.toast.error   { background: #dc2626; }
+.toast.warning { background: #d97706; }
+.toast.info    { background: #2563eb; }
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes toastOut {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(40px); }
+}
+
+/* ---- MODAL ANIMATION ---- */
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.94) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.animate-modal {
+  animation: modalIn 0.25s ease;
+}
+
+/* ---- NOTIFICATION ITEMS ---- */
+.notif-item {
+  background: white;
+  border-radius: 14px;
+  padding: 14px 16px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+}
+
+.notif-item:hover {
+  border-color: #F9844A;
+  background: #FFF2E7;
+}
+
+.notif-item.unread {
+  border-left: 3px solid #E94F37;
+}
+
+/* ---- SURVEY BAR ---- */
+.survey-bar-fill {
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #E94F37, #F9C74F);
+  transition: width 0.6s ease;
+}
+
+/* ---- SCROLLBAR ---- */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #e5e7eb;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #d1d5db;
+}
+
+/* ---- MISC ---- */
+.divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, #e5e7eb, transparent);
+  margin: 16px 0;
+}
+
+.progress-bar {
+  height: 8px;
+  background: #f3f4f6;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #E94F37, #F9844A);
+  border-radius: 10px;
+  transition: width 0.5s ease;
+}
